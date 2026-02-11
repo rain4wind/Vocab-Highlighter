@@ -339,6 +339,9 @@
         popup.appendChild(statusEl);
 
         if (btn) btn.style.display = "none";
+
+        // Immediately highlight this word on the page
+        highlightSingleWord(currentWord, response.translation);
       } else {
         showError(response.error);
       }
@@ -538,6 +541,67 @@
     // Show badge
     if (matchCount > 0) {
       showBadge(matchCount);
+    }
+  }
+
+  /**
+   * Highlight a single word across the page (called after adding a new word).
+   * @param {string} word - The word to highlight.
+   * @param {string} translation - Its translation for the tooltip.
+   */
+  function highlightSingleWord(word, translation) {
+    const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const pattern = new RegExp(`\\b(${escaped})\\b`, "gi");
+
+    const walker = document.createTreeWalker(
+      document.body,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode(node) {
+          const parent = node.parentElement;
+          if (!parent) return NodeFilter.FILTER_REJECT;
+          if (SKIP_ELEMENTS.has(parent.tagName)) return NodeFilter.FILTER_REJECT;
+          if (parent.closest("#vocab-highlighter-root")) return NodeFilter.FILTER_REJECT;
+          if (parent.classList.contains("vh-highlight")) return NodeFilter.FILTER_REJECT;
+          if (parent.isContentEditable) return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        },
+      }
+    );
+
+    const textNodes = [];
+    let node;
+    while ((node = walker.nextNode())) {
+      textNodes.push(node);
+    }
+
+    for (const textNode of textNodes) {
+      const text = textNode.textContent;
+      if (!text || !pattern.test(text)) continue;
+      pattern.lastIndex = 0;
+
+      const frag = document.createDocumentFragment();
+      let lastIndex = 0;
+      let match;
+
+      while ((match = pattern.exec(text)) !== null) {
+        if (match.index > lastIndex) {
+          frag.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+        }
+        const mark = document.createElement("mark");
+        mark.className = "vh-highlight";
+        mark.textContent = match[0];
+        mark.dataset.vhTranslation = translation;
+        mark.dataset.vhWord = word;
+        frag.appendChild(mark);
+        lastIndex = pattern.lastIndex;
+      }
+
+      if (lastIndex < text.length) {
+        frag.appendChild(document.createTextNode(text.slice(lastIndex)));
+      }
+
+      textNode.parentNode.replaceChild(frag, textNode);
     }
   }
 
