@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Vocab Highlighter 设置</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      padding: 32px;
+      min-width: 480px;
+    }
+    h1 {
+      font-size: 22px;
+      margin-bottom: 24px;
+      color: #1a1a1a;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: #555;
+    }
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      max-width: 440px;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+    input:focus {
+      outline: none;
+      border-color: #1976d2;
+    }
+    .hint {
+      font-size: 12px;
+      color: #999;
+      margin-top: 4px;
+    }
+    button {
+      padding: 10px 24px;
+      background: #1976d2;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover { background: #1565c0; }
+    .status {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #4caf50;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Vocab Highlighter 设置</h1>
+
+  <div class="form-group">
+    <label for="apiKey">OpenRouter API Key</label>
+    <input type="password" id="apiKey" placeholder="sk-or-v1-...">
+    <div class="hint">从 <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a> 获取 API Key</div>
+  </div>
+
+  <div class="form-group">
+    <label for="model">模型（可选）</label>
+    <input type="text" id="model" placeholder="google/gemini-2.0-flash-001">
+    <div class="hint">留空则使用默认模型 google/gemini-2.0-flash-001</div>
+  </div>
+
+  <button id="saveBtn">保存设置</button>
+  <div class="status" id="status">设置已保存 ✓</div>
+
+  <script src="options.js"></script>
+</body>
+</html>

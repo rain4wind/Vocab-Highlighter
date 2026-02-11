@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="header">
+    <h1>Vocab Highlighter</h1>
+    <div class="header-actions">
+      <button class="btn-scan" id="scanBtn" title="扫描当前页面">扫描页面</button>
+      <button id="settingsBtn" title="设置">设置</button>
+    </div>
+  </div>
+
+  <div class="api-warning" id="apiWarning">
+    尚未配置 API Key，请先<a id="apiWarningLink">前往设置</a>。
+  </div>
+
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="搜索生词...">
+  </div>
+
+  <div class="vocab-list" id="vocabList">
+    <div class="vocab-empty">生词本为空</div>
+  </div>
+
+  <div class="footer" id="footer">
+    共 0 个生词
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

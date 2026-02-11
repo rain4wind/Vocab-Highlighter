@@ -1,0 +1,73 @@
+/*
+ * content.css — Developer reference for all Vocab Highlighter styles.
+ * These styles are injected programmatically from content.js.
+ *
+ * Two injection targets:
+ *   1. Host page <style>: .vh-highlight, .vh-badge (must live in light DOM)
+ *   2. Shadow DOM: popup and tooltip styles (isolated from host page)
+ */
+
+/* ========================================================================
+   HOST PAGE STYLES (injected into <head>)
+   ======================================================================== */
+
+/* Highlighted vocabulary word */
+.vh-highlight {
+  background-color: #fff176 !important;
+  border-radius: 2px !important;
+  padding: 0 1px !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s !important;
+}
+
+.vh-highlight:hover {
+  background-color: #ffee58 !important;
+}
+
+/* Floating badge — "本页发现 X 个生词" */
+.vh-badge {
+  position: fixed !important;
+  top: 16px !important;
+  right: 16px !important;
+  z-index: 2147483646 !important;
+  background: #1976d2 !important;
+  color: #fff !important;
+  font-size: 14px !important;
+  padding: 8px 16px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+  font-family: system-ui, sans-serif !important;
+  pointer-events: none !important;
+  opacity: 1 !important;
+  transition: opacity 0.5s ease !important;
+}
+
+.vh-badge.vh-fade-out {
+  opacity: 0 !important;
+}
+
+/* ========================================================================
+   SHADOW DOM STYLES (popup & tooltip)
+   ======================================================================== */
+
+/*
+ * These styles are injected into the Shadow DOM root.
+ * They are fully isolated from the host page.
+ */
+
+/* -- Popup ------------------------------------------------------------ */
+
+/* .vh-popup { ... }
+ * .vh-popup-word { ... }
+ * .vh-popup-btn { ... }
+ * .vh-popup-translation { ... }
+ * .vh-popup-status { ... }
+ * .vh-popup-error { ... }
+ * .vh-popup-retry { ... }
+ * .vh-popup-hint { ... }
+ * .vh-popup-close { ... }
+ */
+
+/* -- Tooltip ---------------------------------------------------------- */
+
+/* .vh-tooltip { ... } */
