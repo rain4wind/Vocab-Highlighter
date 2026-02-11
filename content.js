@@ -617,6 +617,23 @@
   }
 
   /**
+   * Remove highlights for a specific word (called when word is deleted from vocab).
+   * @param {string} word
+   */
+  function removeHighlightForWord(word) {
+    const lowerWord = word.toLowerCase();
+    const marks = document.querySelectorAll("mark.vh-highlight");
+    for (const mark of marks) {
+      if (mark.textContent.toLowerCase() === lowerWord) {
+        const parent = mark.parentNode;
+        const text = document.createTextNode(mark.textContent);
+        parent.replaceChild(text, mark);
+        parent.normalize();
+      }
+    }
+  }
+
+  /**
    * Show the "本页发现 X 个生词" badge and auto-fade after 5 seconds.
    * @param {number} count
    */
@@ -686,6 +703,10 @@
         sendResponse({ success: true });
       });
       return true;
+    }
+    if (message.type === "REMOVE_HIGHLIGHT") {
+      removeHighlightForWord(message.payload.word);
+      sendResponse({ success: true });
     }
   });
 

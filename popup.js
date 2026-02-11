@@ -192,6 +192,14 @@ async function handleDelete(e) {
   if (result.success) {
     vocabData = result.vocabList;
     renderList(vocabData);
+
+    // Notify content script to remove highlights for this word
+    try {
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+      if (tab?.id) {
+        chrome.tabs.sendMessage(tab.id, { type: "REMOVE_HIGHLIGHT", payload: { word } });
+      }
+    } catch (_) { /* content script may not be loaded */ }
   }
 }
 
