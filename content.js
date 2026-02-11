@@ -213,17 +213,43 @@
   // -----------------------------------------------------------------------
 
   /**
-   * Walk up from a node to find the nearest block-level ancestor and return its text.
+   * Walk up from a node to find the nearest block-level ancestor and return
+   * a text window centered around the selected word.
    * @param {Node} node
+   * @param {string} word - The selected word, used to center the context window.
    * @returns {string} Paragraph text, capped at MAX_PARAGRAPH_LENGTH.
    */
-  function getEnclosingParagraphText(node) {
+  function getEnclosingParagraphText(node, word) {
     let el = node.nodeType === Node.TEXT_NODE ? node.parentElement : node;
     while (el && !BLOCK_ELEMENTS.has(el.tagName)) {
       el = el.parentElement;
     }
     const text = (el || document.body).textContent || "";
-    return text.slice(0, MAX_PARAGRAPH_LENGTH).trim();
+
+    if (text.length <= MAX_PARAGRAPH_LENGTH) {
+      return text.trim();
+    }
+
+    // Find the word position and extract a window centered on it
+    const wordIndex = text.toLowerCase().indexOf(word.toLowerCase());
+    if (wordIndex === -1) {
+      return text.slice(0, MAX_PARAGRAPH_LENGTH).trim();
+    }
+
+    const half = Math.floor(MAX_PARAGRAPH_LENGTH / 2);
+    let start = wordIndex - half;
+    let end = wordIndex + half;
+
+    if (start < 0) {
+      end = Math.min(text.length, end - start);
+      start = 0;
+    }
+    if (end > text.length) {
+      start = Math.max(0, start - (end - text.length));
+      end = text.length;
+    }
+
+    return text.slice(start, end).trim();
   }
 
   /**
@@ -262,7 +288,8 @@
   function showPopup(word, rect) {
     currentWord = word;
     currentParagraph = getEnclosingParagraphText(
-      window.getSelection().anchorNode
+      window.getSelection().anchorNode,
+      word
     );
 
     popup.innerHTML = `
